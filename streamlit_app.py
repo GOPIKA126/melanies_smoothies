@@ -46,7 +46,7 @@ if ingredients_list:
             fruityvice_response.raise_for_status()  # Raise an error for bad response status
             fv_data = fruityvice_response.json()
             st.subheader(fruit_chosen + ' Nutrition Information')
-            st.json(fv_data)
+            st.write(fv_data)
         except requests.exceptions.RequestException as e:
             st.error(f"Error fetching data for {fruit_chosen}: {e}")
             continue  # Skip to the next fruit
