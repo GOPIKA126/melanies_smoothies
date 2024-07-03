@@ -42,11 +42,15 @@ if ingredients_list:
 
         # Retrieve nutrition information from Fruityvice API
         try:
-            st.subheader(fruit_chosen + 'Nutrition Information')
-            fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+fruit_chosen)
-            #st.text(fruityvice_response.json())
-            fv_df = st.dataframe(data=fruityvice_response.json(),use_container_width=true)
-            st.write(fv_df)
+            fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
+            fruityvice_response.raise_for_status()  # Raise an error for bad response status
+            fv_data = fruityvice_response.json()
+
+            # Convert response to DataFrame
+            fv_df = pd.DataFrame([fv_data])  # Assuming each fruit's data is a single row
+            st.subheader(fruit_chosen + ' Nutrition Information')
+            st.dataframe(fv_df)  # Display DataFrame
+
         except requests.exceptions.RequestException as e:
             st.error(f"Error fetching data for {fruit_chosen}: {e}")
             continue  # Skip to the next fruit
