@@ -2,6 +2,7 @@ import streamlit as st
 from snowflake.snowpark.functions import col
 import requests
 import pandas as pd  # Import Pandas for DataFrame handling
+from urllib.parse import quote  # Import quote function from urllib.parse
 
 # Set title for the Streamlit app
 st.title("My Parents New Healthy Dinner")
@@ -36,7 +37,8 @@ if ingredients_list:
         st.subheader(fruit_chosen + ' Nutrition Information')
         
         try:
-            fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
+            fruit_chosen_encoded = quote(fruit_chosen)  # URL encode the fruit name
+            fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen_encoded}")
             fruityvice_response.raise_for_status()  # Raise an error for bad response status
             
             if fruityvice_response.status_code == 200:
