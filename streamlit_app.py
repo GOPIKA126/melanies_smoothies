@@ -2,7 +2,6 @@ import streamlit as st
 from snowflake.snowpark.functions import col
 import requests
 import pandas as pd  # Import Pandas for DataFrame handling
-from urllib.parse import quote  # Import quote function from urllib.parse
 
 # Set title for the Streamlit app
 st.title("My Parents New Healthy Dinner")
@@ -34,15 +33,10 @@ if ingredients_list:
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
-
-        search_on=pd_df.loc[pd_df['FRUIT_NAME']==fruit_chosen,'SEARCH_ON'].iloc[0]
-        st.write('the search value for',fruit_chosen,'is',search_on,'.')
-        
         st.subheader(fruit_chosen + ' Nutrition Information')
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
+        
         try:
-            fruit_chosen_encoded = quote(fruit_chosen)  # URL encode the fruit name
-            fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen_encoded}")
+            fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
             fruityvice_response.raise_for_status()  # Raise an error for bad response status
             
             if fruityvice_response.status_code == 200:
